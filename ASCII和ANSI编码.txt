@@ -1,0 +1,5 @@
+ASCII和ANSI编码：
+
+    ascii是ansi标准，包含128个字符（7 bits）
+我们说的ansi编码，通常特指windows平台的一种ascii扩展码，他将ascii码扩展到8bits，增加了0x80-0xff共128个字符。在cjk（chinese japanese korean）系统中，ansi还常常指代包括多字节内码的编码。
+    不难看出，所谓ansi编码，就是一种未经国际标准化（也没办法标准化，因为扩展部分的内码存在交集）的兼容ascii编码的，非unicode字符集编码
