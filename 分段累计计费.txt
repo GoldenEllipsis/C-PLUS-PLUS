@@ -1,0 +1,57 @@
+//分段累计计费C++类代码（原创）
+
+//类声明：
+//设置费率 分段金额 累计分段计费
+//计算费用
+class segmentsed_cumulative_fees
+{
+private:
+	double rates[20];
+	double segments[20];
+	double s_fees[20];
+public:
+	void set(double r[],double s[],int n);
+	double fees(double values,int n);
+};
+
+//类实现：
+//设置 费率、分段金额、累计分段计费
+//费率、分段金额、分段数传参
+void segmentsed_cumulative_fees::set(double r[],double s[],int n)
+{
+	segments[n]=0;//作为判断最高分段的依据
+	int i;
+	for(i=0;i<n;i++)
+	{
+		rates[i]=r[i];
+		segments[i]=s[i];
+		if (i==0)
+		{
+			s_fees[i]=rates[i]*segments[i];	
+		}	
+		else 
+		{
+			s_fees[i]=s_fees[i-1]+rates[i]*(segments[i]-segments[i-1]);
+		}	
+	}
+	rates[i]=r[i];
+}
+//计算费用
+//标的价格、分段数传参
+double segmentsed_cumulative_fees::fees(double values,int n)
+{
+	double cost=0;
+	for (int i=0;i<n+1;i++)
+	{
+		if(segments[i]==0||values<=segments[i])
+		{
+			if(i==0)
+			{
+				cost=values*rates[i];
+			}
+			else cost=s_fees[i-1]+(values-segments[i-1])*rates[i];
+			break;
+		}
+	}
+	return cost;
+}		
