@@ -1,0 +1,56 @@
+以温度转换为例说明：面向过程设计方法、面向对象设计方法
+
+
+//面向过程的设计方法 
+//华氏温度换算成摄氏温度
+#include <iostream>
+using namespace std;
+int main()
+{
+    double ftemp,ctemp ;  // 申请内存空间
+    cout<<"请输入华氏温度：\n" ;
+    cin >> ftemp;  // 从键盘输入华氏温度 
+    ctemp = (ftemp-32)/1.8;  // 温度换算
+    cout <<"摄氏温度：\n";
+    cout<< ctemp;  // 在显示器上输出摄氏温度 
+    return 0;  // 程序结束，退出
+}
+
+
+//面向对象设计方法 
+//华氏温度换算成摄氏温度
+#include <iostream>
+using namespace std;
+ 
+//设计一个温度类 
+class temp
+{
+private:
+    double ftemp,ctemp ; 
+public:
+    //类方法 
+    double input();
+    double output();       
+};
+ 
+int main()
+{
+    temp t;//定义一个温度类对象 
+    t.input();
+    t.output();
+     
+    return 0;  
+}
+ 
+//定义类方法 
+double temp::input()
+{
+    cout<<"请输入华氏温度:\n"; 
+    cin>>ftemp;
+}
+double temp::output()
+{
+    cout<<"摄氏温度:\n";
+    ctemp = (ftemp-32)/1.8;
+    cout<<ctemp;
+}
