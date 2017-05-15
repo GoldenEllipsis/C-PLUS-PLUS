@@ -1,0 +1,15 @@
+1、注册用户
+
+2、下载地址
+http://www.imsdn.cn/developer-tools/visual-studio-2013/
+
+3、下载版本
+Visual Studio Express 2013 for Windows Desktop (x86) – DVD (Chinese-Simplified) 详细信息
+
+4、如何下载MSDN原版系统镜像 - MSDN我告诉你
+http://www.imsdn.cn/how-to-download-msdn-iso/
+
+5、工具-选项
+调试--符号--Microsoft符号服务器勾
+文本编辑器--C++ --行号勾
+环境--深色
