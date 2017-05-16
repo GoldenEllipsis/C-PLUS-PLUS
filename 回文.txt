@@ -1,0 +1,31 @@
+//m,m平方,m立方都是回文
+#include <iostream>
+using namespace std;
+
+bool palindrome(int x)
+{
+	int t = x;
+	int m = 0;
+
+	while (t)
+	{
+		m = m*10+ t % 10;
+		t /= 10;
+	}
+	
+	if (x == m)
+		return true; 
+	else 
+		return false;
+}
+//主程序
+int main()
+{
+	int x;
+	cin >> x;
+	if (palindrome(x) && palindrome(x*x) && palindrome(x*x*x))
+		cout << "是回文" << endl;
+	else
+		cout << "不是回文"<<endl;
+	return 0;
+}
