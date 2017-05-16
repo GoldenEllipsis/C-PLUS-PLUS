@@ -1,0 +1,55 @@
+C2-3实心菱形  (100/100 分数)
+题目描述
+打印 n 阶实心菱形
+
+输入描述
+输入一个整数n，n<=10
+
+输出描述
+输出 n 阶实心菱形 ， 占 2*n-1 行
+
+样例输入
+3
+样例输出
+  *
+ ***
+*****
+ ***
+  *
+  
+#include <iostream>
+using namespace std;
+ 
+int main() 
+{
+	int i,j,k;
+    int n;
+	cin>>n;
+
+    for (i=0; i<(2*n-1)/2; i++) {
+        for (j=0; j<(2*n-1)/2-i; j++) {
+            cout<<" ";
+        }
+        for (k=0; k<=2*i; k++) {
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+   
+    for (i=0; i<2*n-1; i++) {
+        cout<<"*";
+    }
+    cout<<endl;
+    
+    for (i=(2*n-1)/2+1; i<2*n-1; i++) {
+        for (j=0; j<i-(2*n-1)/2; j++) {
+            cout<<" ";
+        }
+        for (k=0; k<(2*n-1-i)*2-1; k++) {
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+	
+	return 0; 
+}
