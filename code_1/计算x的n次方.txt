@@ -1,0 +1,32 @@
+函数：定义好的、可重用的功能模块
+
+定义函数：将一个模块的算法用C++描述出来
+
+函数名：功能模块的名字
+
+函数的参数：计算所需要的数据和条件
+
+函数的返回值：需要返回的计算结果
+
+
+//计算x的n次方
+#include <iostream>
+using namespace std;
+
+double power(double x, int n)
+{
+	double val = 1.0;
+	while (n--)
+	{
+		val *= x;
+	}
+	return val;
+}
+
+int main()
+{
+	double pow;
+	pow = power(5, 2);
+	cout <<"5的2次方是："<< pow<<endl;
+	return 0;
+}
