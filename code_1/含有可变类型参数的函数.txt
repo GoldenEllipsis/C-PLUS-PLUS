@@ -1,0 +1,21 @@
+//含有可变类型参数的函数
+#include <iostream>
+#include <initializer_list>//可变参数类型包含的头文件
+#include <string>//
+using namespace std;
+
+string func(initializer_list<string> li)//也可以有其他类型参数
+{
+	string str("");
+	for (auto beg = li.begin(); beg != li.end(); ++beg)
+		str += *beg;
+	return str;
+}
+
+int main()
+{
+	//cout函数重载的是string类库中的string类型
+	//而不是CString或string.h中的
+	cout << func({ "This", " ", "is", " ", "C++" }) << endl;
+	return 0;
+}
