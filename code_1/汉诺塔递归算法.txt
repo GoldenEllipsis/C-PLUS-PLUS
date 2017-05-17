@@ -1,0 +1,40 @@
+有三根针A、B、C。A针上有N个盘子，大的在下，小的在上，要求把这N个盘子从A针移到C针，在移动
+过程中可以借助B针，每次只允许移动一个盘，且在移动过程中在三根针上都保持大盘在下，小盘在上。
+
+将n 个盘子从A针移到C针可以分解为三个步骤：
+   将A 上n-1个盘子移到 B针上（借助C针）；
+   把A针上剩下的一个盘子移到C针上；
+   将n-1个盘子从B针移到C针上（借助A针）。
+
+//汉诺塔递归算法
+#include <iostream>
+using namespace std;
+
+//从A移动到C
+void move(char A, char C)
+{
+	cout << A << "------" << C << endl;
+}
+
+//递归
+void hanoi(int n,char A,char B,char C)
+{
+	if (n == 1)
+		move(A, C);
+	else
+	{
+		hanoi(n - 1, A, C, B);
+		move(A, C);
+		hanoi(n - 1, B, A, C);
+	}
+}
+
+//主程序
+int main()
+{
+	int n;
+	cout << "请输入盘子的数量：";
+	cin >> n;
+	hanoi(n, 'A', 'B','C');
+	return 0;
+}
