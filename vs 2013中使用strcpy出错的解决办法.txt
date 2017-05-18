@@ -1,0 +1,15 @@
+vs 2013中使用strcpy出错的解决办法：
+
+    因为C++改写了C strcpy函数为strcpy_s
+有三个参数，其中，中间的参数为第三个参数的长度
+strcpy_s的定义：
+errno_t strcpy_s(
+   char *strDestination,
+   size_t numberOfElements,
+   const char *strSource 
+);
+所以，使用strcpy改为使用strcpy_s
+并增加中间的参数就可以了。
+例如：
+strcpy_s(name, strlen(fname)+1,fname);
+使用strcpy_s不需要特别包含头文件。
