@@ -1,0 +1,13 @@
+委托构造函数
+
+类中往往有多个构造函数，只是参数表和初始化列表不同，其初始化算法都是相同的，
+这时，为了避免代码重复，可以使用委托构造函数。
+
+例如：
+Clock类的两个构造函数：
+Clock(int newH, int newM, int newS) : hour(newH),minute(newM),  second(newS)  {  } //有参构造函数
+Clock(): hour(0),minute(0),second(0) { }//默认构造函数
+
+可以改成如下：
+Clock(int newH, int newM, int newS):  hour(newH),minute(newM),  second(newS){}
+Clock(): Clock(0, 0, 0) { }//委托构造函数
