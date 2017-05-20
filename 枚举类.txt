@@ -1,0 +1,45 @@
+枚举类 c++11标准
+
+枚举类定义
+
+  语法形式
+
+enum class 枚举类型名: 底层类型 {枚举值列表};
+
+  例：
+enum class Type { General, Light, Medium, Heavy};
+enum class Type: char { General, Light, Medium, Heavy};
+enum class Category { General=1, Pistol, MachineGun, Cannon};
+
+
+枚举类的优势
+
+  强作用域，其作用域限制在枚举类中。
+
+  例：使用Type的枚举值General：
+
+     Type::General
+
+  转换限制，枚举类对象不可以与整型隐式地互相转换。
+
+  可以指定底层类型
+
+  例：
+
+enum class Type: char { General, Light, Medium, Heavy};
+
+
+
+例4-9 枚举类举例
+
+#include<iostream>
+using namespace std;
+enum class Side{ Right, Left };
+enum class Thing{ Wrong, Right };  //不冲突
+int main()
+{
+    Side s = Side::Right;
+    Thing w = Thing::Wrong;
+    cout << (s == w) << endl;  //编译错误，无法直接比较不同枚举类
+    return 0;
+}
