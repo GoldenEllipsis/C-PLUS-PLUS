@@ -1,0 +1,6 @@
+sublimetext3  dev c++  notepad++
+搭配使用，中文防止乱码的解决办法:
+
+sublimetext3    file--set file encoding to--gbk
+dev c++         默认
+notepad++       编码：以ansi格式编码
