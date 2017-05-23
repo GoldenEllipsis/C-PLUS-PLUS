@@ -1,0 +1,20 @@
+1、vs2013, 创建string类对象，使用string类对象，输入输出
+要包含string头文件，否则>> <<运算符不能使用。
+
+string src;
+cin>>src;//string类对象，包含头文件 string
+int size;
+if( size < (int)src.length())//
+{
+  ...
+}
+
+2、比较运算，string类成员函数 length()的返回值问题，
+在进行比较运算的时候会出现问题。
+
+//因为scr.length()的返回值是unsigned int
+//所以，要进行显式强制转换为int
+
+//理由：
+//scr.length()的返回值在与int比较的时候，假如int为负数，
+//int会转换为unsigned int，负数成了很大的数。
