@@ -1,0 +1,99 @@
+C6-2 字符串的回文子序列个数  (100/100 分数)
+题目描述
+求一个长度不超过15的字符串的回文子序列个数（子序列长度>=1）。
+
+
+输入描述
+输入一个长度不超过15的字符串,字符串均由小写字母表示
+
+
+输出描述
+输出其回文子序列个数
+
+
+样例输入
+abaa
+
+样例输出
+10
+
+注释
+本例中其所有回文子序列为：
+a,b,a,a,aba,aba,aa,aa,aa,aaa 
+一个字符串的子序列是指在原字符串上去除某些字符但不破坏余下元素的相对位置（在前或在后）而形成的新字符串。
+
+
+#include<iostream>
+#include<string.h>//
+using namespace std;
+
+bool Anagram(string);
+void generate(const string src, int start_location, int Anagram_str_size, char *_Anagram_str);
+int anagram_num = 0;
+int main()
+{
+	string str;
+	cin >> str;//
+	char *p = new char[2];
+	/*
+	（1）占位指针,这个p是用来存储上一次要计算的回文字符串（也不一定是回文，因为要经过Anagram才能确定字符串是文回），
+	因为程序第一次运行，上一次没有存储任何字符串。
+	程序流程是这样的，从上至下，从左到右：
+	输入abcd后
+	┠a
+	┃┠ab
+	┃┃┠abc
+	┃┃┃┖abcd
+	┃┃┖abd
+	┃┠ac
+	┃┃┖acd
+	┃┖ad
+	┠ b
+	┃┠bc
+	┃┃┖bcd
+	┃┖bd
+	┠ c
+	┃┖cd
+	┖ d
+	（2）要用new char[2]，如果不这样的话，在子程序中删除指针时会出错，strcpy会把定义的变量p复制过去，这时delete[]删除指针时会出错。
+	*/
+	generate(str, 0, 1, p);
+	cout << anagram_num;
+	return 0;
+}
+
+bool Anagram(string str)
+{
+	int n = str.length();
+	for (int i = 0; i < n / 2; i++)
+	{
+		if (str[i] != str[n - i - 1])
+			return false;
+	}
+	return true;
+}
+
+/*
+产生新字串，src：标准输入的字串；start_location:产生新字串从哪位开始，从0开始；Anagram_str_size:新字串长度，从1开始；_Anagram_str:上一级字串
+*/
+void generate(const string src, int start_location, int Anagram_str_size, char *_Anagram_str)
+{
+	if (Anagram_str_size > (int)src.length() || Anagram_str_size < 1) return;//
+
+	for (int i = start_location; i < (int)src.length(); i++)//
+	{
+		//生成存储回文字符串的空间
+		char *Anagram_str = new char[Anagram_str_size + 1];
+		strcpy(Anagram_str,_Anagram_str);//
+		//将回文字符加入
+		Anagram_str[Anagram_str_size - 1] = src[i];
+		Anagram_str[Anagram_str_size] = '\0';
+		//如果字符是回文那么让统计数字加一
+		if (Anagram(Anagram_str))
+		{
+			anagram_num += 1;
+		}
+		generate(src, i + 1, Anagram_str_size + 1, Anagram_str);
+		delete[] Anagram_str;
+	}
+}
