@@ -1,0 +1,49 @@
+虚析构函数
+
+为什么需要虚析构函数？ - 可能通过基类指针删除派生类对象； 
+- 如果你打算允许其他人通过基类指针调用对象的析构函数（通过delete这样做是正常的），
+就需要让基类的析构函数成为虚函数，否则执行delete的结果是不确定的。
+
+一个不使用虚析构函数的例子
+
+源代码：
+---------------------------------
+#include <iostream>
+using namespace std;
+
+class Base {
+public:
+    virtual ~Base();
+};
+Base::~Base() {
+    cout<< "Base destructor" << endl;
+ }
+ 
+class Derived: public Base{
+public:
+    Derived();
+    virtual ~Derived();
+private:
+    int *p;
+};
+Derived::Derived()
+{
+  p = new int(0);//
+}
+Derived::~Derived()
+{
+  delete p;
+}
+
+void fun(Base *b)
+{
+  cout << "Derived destructor" << endl;
+  delete b;
+}
+
+int main()
+{
+  Base *b = new Derived();//
+  fun(b);
+  return 0;
+}
