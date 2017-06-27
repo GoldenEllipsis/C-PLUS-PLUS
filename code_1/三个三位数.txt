@@ -1,0 +1,64 @@
+用123456789这九个数字组成三个三位数,使第2个数是第一个数的2倍,第三个数是第一个数的3倍,每个数字只能用一次
+
+-----------------------------------------
+#include<iostream>  
+using namespace std;  
+  
+int main()
+{
+	//根据题意，最小三位数初始值123 
+	int num = 123;
+	int num_temp = 123;//保存三位数 
+	int ch[10] = {0};//用来判断是否重复的数组，初始化0 
+	int times = 1;  //倍数 
+	
+	while (num_temp*3<999)
+	{
+		do
+		{	
+			int flag = 1; 
+			int t = num;
+			//判断三位数每位是否为0或是否重复
+			while(t)
+			{	
+				int temp = t%10;
+				ch[temp]++;
+				// ch[temp]大于 1 即重复 
+				if(ch[temp]>1||temp==0)
+				{
+					flag =0;
+					break;
+				}
+				t /= 10;
+			}
+			
+			//如果重复，倍数置 1 三位数 ++ 并保存 
+			//判断数组初始化 0 
+			if(flag==0)
+			{
+				times = 1;
+				num = num_temp;//取回三位数 
+				num++;         //三位数 ++ 
+				num_temp =num; //++后保存三位数 
+				
+				for(int i=0;i<=9;i++)
+				{
+					ch[i] = 0;
+				}
+			}
+			else if(flag==1)
+			{	
+				//三位数每位不为0也不重复
+				//2倍、3倍 ，再返回判断每位是否为0或是否重复
+				times++;
+				num = num_temp*times;	
+			}
+	
+		}while(times<=3);//三位数3倍后退出 
+		
+		//输出保存的三位数及其2、3倍的三位数    
+		cout<<num_temp<<";"<<num_temp*2<<";"<<num_temp*3<<endl;
+	}
+	    
+	return 0;
+}
