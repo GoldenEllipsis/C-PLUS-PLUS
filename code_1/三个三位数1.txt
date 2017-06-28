@@ -1,0 +1,61 @@
+用123456789这九个数字组成三个三位数,使第2个数是第一个数的2倍,第三个数是第一个数的3倍,每个数字只能用一次
+
+---------------------------------------------
+#include<iostream>  
+using namespace std;  
+
+bool noRepeat(int num,int ch[]);
+bool matchCondition(int num);
+int main()
+{
+	int num = 123;
+	while(num<329)
+	
+	{
+		if(matchCondition(num))
+		{
+			cout<<num<<";"<<num*2<<";"<<num*3<<endl;	
+		}	
+		num++;
+	}
+	
+	return 0;
+}
+
+bool noRepeat(int num,int ch[])
+{
+	bool flag=1;
+	while(num)
+	{	
+		int temp = num%10;
+		ch[temp]++;
+		
+		if(ch[temp]>1||temp==0)
+		{
+			flag =0;
+			break;
+		}
+		num/= 10;
+	}
+	return flag;
+}
+
+bool matchCondition(int num)
+{
+	bool flag = 0;
+	int times = 1;
+	int ch[10]={0};
+	if(noRepeat(num*times,ch))
+	{
+		times++;
+		if(noRepeat(num*times,ch))
+		{
+			times++;
+			if(noRepeat(num*times,ch))
+			{
+				flag = 1;
+			}
+		}
+	}
+	return flag;		
+}
