@@ -1,0 +1,141 @@
+全排列
+
+描述
+给定一个由不同的小写字母组成的字符串，输出这个字符串的所有全排列。 
+我们假设对于小写字母有'a' < 'b' < ... < 'y' < 'z'，而且给定的字符串中的字母已经按照从小到大的顺序排列。
+
+输入
+输入只有一行，是一个由不同的小写字母组成的字符串，已知字符串的长度在1到6之间。
+输出
+输出这个字符串的所有排列方式，每行一个排列。要求字母序比较小的排列在前面。字母序如下定义：
+
+已知S = s1s2...sk , T = t1t2...tk，则S < T 等价于，存在p (1 <= p <= k)，使得
+s1 = t1, s2 = t2, ..., sp - 1 = tp - 1, sp < tp成立。
+样例输入
+abc
+样例输出
+abc
+acb
+bac
+bca
+cab
+cba
+------------------------------------------------------------
+//依次从字符串中取出一个字符作为最终排列的第一个字符，
+//对剩余字符组成的字符串生成全排列，
+//最终结果为取出的字符和剩余子串全排列的组合。
+#include <iostream>
+#include <string>
+using namespace std;
+  
+void permute1(string prefix, string str)
+{
+	if(str.length() == 0)
+	cout << prefix << endl;
+	else
+	{
+		for(int i = 0; i < str.length(); i++)
+		permute1(prefix+str[i], str.substr(0,i)+str.substr(i+1,str.length()));
+	}
+}
+  
+void permute1(string s)
+{
+	permute1("",s);
+}
+  
+int main()
+{
+	string str;
+	cin>>str;
+	permute1(str);
+}
+
+------------------------------------------------------------------
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h> 
+
+struct seq 
+{ 
+	char str[7]; 
+}; 
+   
+struct seq seqs[721]; 
+int count; 
+
+int is_swap(char *str, int begin, int k) 
+{ 
+	int i, flag; 
+	
+	for (i = begin, flag = 1; i < k; i ++) 
+	{ 
+		if (str[i] == str[k]) 
+		{ 
+			flag = 0; 
+			break; 
+		} 
+	} 
+
+	return flag; 
+} 
+
+void swap(char *str, int a, int b) 
+{ 
+	char temp; 
+	temp = str[a]; 
+	str[a] = str[b]; 
+	str[b] = temp; 
+} 
+
+void permutation_process(char *name, int begin, int end) 
+{ 
+	int k; 
+	
+	if (begin == end - 1) 
+	{ 
+		strcpy(seqs[count].str, name); 
+		count ++; 
+	}
+	else 
+	{ 
+		for (k = begin; k < end; k ++) 
+		{ 
+			if (is_swap(name, begin, k)) 
+			{ 
+				swap(name, k, begin); 
+				permutation_process(name, begin + 1, end); 
+				swap(name, k, begin); 
+			} 
+		} 
+	} 
+} 
+
+int compare(const void *p, const void *q) 
+{ 
+	const char *a = (char *)p; 
+	const char *b = (char *)q; 
+	return strcmp(a, b); 
+} 
+
+int main() 
+{ 
+	char name[7]; 
+	int i, len; 
+	
+	while (scanf("%s", name) != EOF) 
+	{ 
+		count = 0; 
+		len = strlen(name); 
+		permutation_process(name, 0, len); 
+		qsort(seqs, count, sizeof(seqs[0]), compare); 
+		
+		for (i = 0; i < count; i ++) 
+		{ 
+			printf("%s\n", seqs[i].str); 
+		} 
+		printf("\n"); 
+	} 
+	
+	return 0; 
+} 
