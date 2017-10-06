@@ -1,0 +1,244 @@
+    1、运算符重载，就是对已有的运算符(C++中预定义的运算符)赋予多重的含义，
+       使同一运算符作用于不同类型的数据时导致不同类型的行为。 
+ 
+    2、运算符重载的目的是：扩展C++中提供的运算符的适用范围，使之 能作用于对象。 
+
+    3、同一个运算符，对不同类型的操作数，所发生的行为不同。
+
+    4、运算符重载的实质是函数重载：
+       可以重载为普通函数，也可以重载为成员函数 
+       把含运算符的表达式转换成对运算符函数的调用。 
+       把运算符的操作数转换成运算符函数的参数。
+       运算符被多次重载时，根据实参的类型决定调用哪个运算符函数。
+
+    5、返回值类型 operator 运算符（形参表）  {   …… } 
+    
+-------------------------------------------------------------------------
+
+//+、-运算符重载
+#include <iostream>
+using namespace std;
+//复数类 
+class Complex  
+{   
+public:     
+	double real,imag;
+	//构造函数         
+	Complex( double r = 0.0, double i= 0.0 ):real(r),imag(i)   {     }     
+	Complex operator-(const Complex & c);//重载为成员函数  
+};
+// 重载为普通函数时，参数个数为运算符目数。
+Complex operator+( const Complex & a, const Complex & b)//重载为普通函数 
+{  
+	return Complex( a.real+b.real,a.imag+b.imag); //返回一个临时对象 
+}
+//重载为成员函数时，参数个数为运算符目数减一。  
+Complex Complex::operator-(const Complex & c) 
+{   
+	return Complex(real - c.real, imag - c.imag); //返回一个临时对象 
+}
+
+int main() 
+{   
+	Complex a(4,4),b(1,1),c;   
+	c = a + b; //等价于c=operator+(a,b);   
+	cout << c.real << "," << c.imag << endl;   
+	cout << (a-b).real << "," << (a-b).imag << endl;  //a-b等价于a.operator-(b)   
+	return 0; 
+} 
+---------------------------------------------------------------------------
+
+// = 运算符重载，只能重载为成员函数
+#include <iostream>
+#include <string>
+#include <cstring>
+using namespace std;
+//String类 
+class String 
+{  
+private:            
+	char * str;  
+public:
+	//构造函数（有参）  
+	String (const char * s)
+	{
+		if( s == 0)
+		{
+			str=new char[1];
+			str[0] = 0;
+		}      
+		else
+		{
+			str = new char[strlen(s)+1]; 
+			strcpy( str, s);
+		}
+	}
+	//构造函数（无参） 
+	String ():str(new char[1]) { str[0] = 0;}
+	//复制构造函数(深拷贝），避免指向同一内存空间 
+	String(const String & s)
+	{
+		str = new char[strlen(s.str)+1];  
+		strcpy(str,s.str); 
+	} 
+	//析构函数 
+	~String( ) 
+	{ 
+		delete [] str;
+	} 
+	//取成员变量str   
+	const char * c_str() { return str; }; 
+	//运算符 “= ”重载（参数为const char * s）  
+	String & operator = (const char * s); 
+	//运算符 “= ”重载（参数为const String & s） 
+	String  &  operator = (const String & s) 
+	{ 
+	//如不定义自己的赋值运算符，那么S1=S2实际上导致 S1.str和 S2.str 指向同一地方。 
+    //如果S1对象消亡，析构函数将释放 S1.str指向的空间，则S2消亡时还 要释放一次，不妥。
+    //另外，如果执行 S1 = "other"；会导致S2.str指向的地方被delete
+		if(this==&s)  
+			return *this;   //预防s=s的情况发生 
+		delete [] str;   
+		str = new char[strlen( s.str)+1];   
+		strcpy( str,s.str);   
+		return * this; 
+	}   
+	
+};
+//重载“=”以使得 obj = “hello”能够成立
+String & String::operator = (const char * s)  
+{  
+	//“=”左边的对象的str删除  
+	delete [] str;
+	//再为str分配内存空间   
+	str = new char[strlen(s)+1]; 
+	//  
+	strcpy( str, s); 
+	//返回String对象  
+	return * this; 
+} 
+
+ int main() 
+ {     
+	 String s;     
+	 s = "Good Luck," ; //等价于 s.operator=("Good Luck,");     
+	 cout << s.c_str() << endl;  
+	 String s2 = "hello!"; 
+	 //这条语句的“= ”不是赋值语句 是初始化语句 
+	 //需要带参数的构造函数 
+	 cout << s2.c_str() << endl;   
+	 s = "Shenzhou 8!"; //等价于 s.operator=("Shenzhou 8!");     
+	 cout << s.c_str() << endl;     
+	 return 0; 
+ } 
+-----------------------------------------------------------------
+
+//另一String类代码
+#include <iostream>
+#include <string>
+#include <cstring>
+using namespace std;
+class MyString 
+{
+private: 
+	char * p;
+public:
+	MyString(const char * s) 
+	{
+		if( s) 
+		{
+			p = new char[strlen(s) + 1];
+			strcpy(p,s);
+		}
+		else
+			p = NULL;
+
+	}
+	~MyString() { if(p) delete [] p; }
+	
+	MyString(const MyString &s) 
+	{
+		if( !s.p) 
+		{
+			p = NULL;
+		}
+		else
+		{
+			p = new char[strlen(s.p) + 1];
+			strcpy(p,s.p); 
+		}
+	}
+	
+    MyString & operator = (const char * s)  
+	{   
+		delete [] p;   
+		p = new char[strlen(s)+1];   
+		strcpy(p,s); 
+		return * this; 
+	}
+	MyString & operator = (const MyString &s)  
+	{   
+		if(this==&s)  
+			return *this;
+		delete [] p;   
+		p = new char[strlen(s.p)+1];   
+		strcpy(p,s.p);  
+		return * this; 
+	}
+	void Copy(const char * s) 
+	{
+		if( s) 
+		{
+			delete [] p; 
+			p = new char[strlen(s) + 1];
+			strcpy(p,s); 
+		}
+		else
+			p = NULL;
+		
+	}
+	friend ostream & operator<<( ostream & o,const MyString & s)
+	{  
+		o << s.p ;  
+		return o; 
+	} 
+};
+int main()
+{
+	char w1[200],w2[100];
+	while( cin >> w1 >> w2) 
+	{
+		MyString s1(w1),s2 = s1;
+		MyString s3(NULL);
+		s3.Copy(w1);
+		cout << s1 << "," << s2 << "," << s3 << endl;
+
+		s2 = w2;
+		s3 = s2;
+		s1 = s3;
+		cout << s1 << "," << s2 << "," << s3 << endl;
+		
+	}
+}
+-------------------------------------------------------------------
+
+// 一般情况下，将运算符重载为类的成员函数，是较好的选择。但有时，重载为成员函数不能满足使用要求，
+//重载为普通函数，又不能访问类的私有成员，所以需要将运算符重载为友元
+
+class Complex  
+{ 
+	double real,imag; 
+public:  
+	Complex( double r, double i):real(r),imag(i){ };   
+	Complex operator+( double r );  
+	friend Complex operator + (double r,const Complex & c);//
+};
+Complex Complex::operator+( double r ) 
+{ //能解释 c+5     
+	return Complex(real + r,imag);  
+}  
+Complex operator+ (double r,const Complex & c)  
+{  //能解释 5+c  
+	return Complex( c.real + r, c.imag); 
+} 
+------------------------------------------------------------------------------
