@@ -1,0 +1,96 @@
+自增运算符++、自减运算符--有前置/后置之分，为了区分所重载的是前 置运算符还是后置运算符，C++规定： 
+ 
+1、前置运算符作为一元运算符重载： 
+ 
+重载为成员函数： T & operator++(); T & operator--(); 
+重载为全局函数： T1 & operator++(T2); T1 & operator—(T2); 
+
+2、后置运算符作为二元运算符重载，多写一个没用的参数： 
+ 
+重载为成员函数： T operator++(int); T operator--(int); 
+重载为全局函数： T1 operator++(T2,int ); T1 operator—( T2,int); 
+
+3、前置++、前置--，返回值的类型是类型的引用，也就是本身（*this)；
+后置++、后置--，返回值的类型是类型，不是本身，是++或--之前的值,是一个临时变量。
+
+4、前置的++、前置的--,没有产生对象，后置++、后置--会产生一个临时对象，
+前置的++、前置的--的运行效率会比后置++、后置--的运行效率高。
+
+------------------------------------------------------------
+
+运算符重载的注意事项： 
+
+1.  C++不允许定义新的运算符 ； 
+2.  重载后运算符的含义应该符合日常习惯； 
+	complex_a + complex_b 
+	word_a > word_b 
+	date_b = date_a + n 
+3.  运算符重载不改变运算符的优先级； 
+4.  以下运算符不能被重载：“.”、“.*”、“::”、“?:”、sizeof； 
+5.  重载运算符()、[]、->或者赋值运算符=时，运算符重载函数必须声明为 类的成员函数。
+
+------------------------------------------------------------------------
+
+//CDemo 类，自增、自减运算符重载
+#include <iostream> 
+using namespace std;
+class CDemo 
+{   
+private :  
+	int n;   
+public:  
+	CDemo(int i=0):n(i) { }
+	//成员函数，前置返回类对象的引用（本身）  
+	CDemo & operator++();
+	//成员函数，后置返回类对象         
+	CDemo operator++( int );   
+	//int 作为一个类型强制转换运算符被重载      
+	operator int ( ) { return n; }
+	//全局友元函数 ，前置返回类对象的引用（本身）       
+	friend CDemo & operator--(CDemo & ); 
+	//全局友元函数，后置返回类对象   
+	friend CDemo operator--(CDemo & ,int);     
+};
+ 
+CDemo & CDemo::operator++() 
+{ //前置 ++  
+	n ++;  
+	return * this; 
+}  // ++s即为: s.operator++(); 
+
+CDemo CDemo::operator++( int k ) 
+{ //后置 ++  
+	CDemo tmp(*this); //记录修改前的对象  
+	n ++;  
+	return tmp; //返回修改前的对象 
+} // s++即为: s.operator++(0);
+ 
+CDemo & operator--(CDemo & d)  
+{//前置--     
+	d.n--;    
+	return d;     
+} //--s即为: operator--(s); 
+
+CDemo operator--(CDemo & d,int)  
+{//后置--    
+	CDemo tmp(d);   
+	d.n --;   
+	return tmp;   
+} //s--即为: operator--(s, 0);
+ 
+int main () 
+{ 
+	CDemo d(5);  
+	cout << (d++ ) << ",";  //等价于 d.operator++(0);类型转换运算  
+	cout << d << ","; //类型转换运算 
+	 
+	cout << (++d) << ",";   //等价于 d.operator++();类型转换运算  
+	cout << d << endl;  
+	
+	cout << (d-- ) << ",";  //等价于 operator--(d,0);类型转换运算
+	cout << d << ",";  //类型转换运算
+	 
+	cout << (--d) << ",";   //等价于 operator--(d);类型转换运算 
+	cout << d << endl; //类型转换运算 
+	return 0;
+}
