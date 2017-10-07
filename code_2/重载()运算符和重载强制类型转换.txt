@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+class CConvert  
+{
+private:  
+     int m_nValue;    
+public:  
+        CConvert(){m_nValue = 10;}   
+  
+        // 重载()运算符  
+        int operator ()(int x);  
+  
+        // 重载int强制类型转换  
+       operator int();  
+}; 
+ 
+// 重载()运算符 
+int CConvert::operator ()(int x)  
+{  
+	m_nValue = x;
+    return m_nValue;  
+}  
+
+// 重载int强制类型转换 
+CConvert::operator int()  
+{  
+    return m_nValue;  
+}  
+
+//测试函数  
+void SetValue(int nValue)  
+{  
+    int nTest = nValue;  
+}  
+   
+int main()  
+{   
+     CConvert convert;//调用无参构造函数  
+     SetValue(convert);  // 调用强制类型转换重载符  
+     SetValue(convert(15)); // 调用重载之后的括号运算符  
+     return 0;  
+}  
