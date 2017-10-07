@@ -1,0 +1,109 @@
+#include<iostream>  
+using namespace std;
+//二维数组 
+class Array2 
+{
+	int** ptr;
+	int _x, _y;
+public:
+	//无参构造函数 成员变量初始化 
+	Array2() :ptr(NULL),_x(0),_y(0) {}
+	//有参构造函数 成员变量初始化 
+	Array2(int x, int y)
+	{
+		//1、 
+		_x = x; 
+		_y = y;
+		
+		//2、x行指针内存空间 
+		ptr = new int *[x];
+		for (int i = 0; i < x; i++)
+		{
+			//每行指针所指，y列内存空间 
+			ptr[i] = new int[y];
+		}
+	}	
+	//[]重载 返回类型 int*
+	int* operator[](int n)
+	{
+		return ptr[n];
+	}
+	
+	//()重载 返回类型 int 
+	int operator()(int x, int y)
+	{
+		return ptr[x][y];
+	}
+	//= 重载 返回类型 Array2&
+	Array2& operator=(const Array2& a)
+	{
+		//main函数代码，可以省去if语句
+		//因为对象b为无参构造函数创建 
+		//ptr == NULL 
+		if (ptr != NULL)
+		{
+			//删除内存空间 代码同析构函数 
+			for (int i = 0; i < _x; i++)
+			{
+				delete[]ptr[i];
+			}
+			delete[]ptr;
+		}
+		//再分配内存空间 
+		//指针的指针，指向行指针数组，分配内存空间 
+		ptr = new int*[a._x];
+		//行指针数组，每行指向，分配内存空间
+		//并复制元素 
+		for (int i = 0; i < a._x; i++)
+		{
+			//每行分配内存空间 
+			ptr[i] = new int[a._y];
+			//每行复制 
+			memcpy(ptr[i], a.ptr[i], sizeof(int)*a._y);
+		}
+		//成员变量_x,_y更新 
+		_x = a._x;
+		_y = a._y;
+		//返回对象 
+		return *this;
+	}
+	
+	//析构函数 
+	~Array2()
+	{
+		if (ptr != NULL)//考虑无参构造函数
+		{
+			for (int i = 0; i < _x; i++)
+			{
+				delete[]ptr[i];
+			}
+			delete []ptr;
+		} 
+	}
+};
+
+
+int main() 
+{
+	Array2 a(3, 4);
+	int i, j;
+	for (i = 0; i < 3; ++i)
+		for (j = 0; j < 4; j++)
+			a[i][j] = i * 4 + j;
+	for (i = 0; i < 3; ++i) 
+	{
+		for (j = 0; j < 4; j++) {
+			cout << a(i, j) << ",";
+		}
+		cout << endl;
+	}
+	cout << "next" << endl;
+	Array2 b;     b = a;
+	for (i = 0; i < 3; ++i) {
+		for (j = 0; j < 4; j++) {
+			cout << b[i][j] << ",";
+		}
+		cout << endl;
+	}
+	return 0;
+}
