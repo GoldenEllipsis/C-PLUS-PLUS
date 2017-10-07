@@ -1,0 +1,73 @@
+//重载强制类型转换运算符，是不写返回类型的
+//可以显式的或自动的转换
+------------------------------------------------------------
+
+//Complex类强制转换为double
+#include <iostream> 
+using namespace std; 
+class Complex 
+{    
+	double real,imag;    
+public:    
+	Complex(double r=0,double i=0):real(r),imag(i) { };
+	//重载强制类型转换运算符 double   
+	operator double () { return real; }      
+}; 
+int main() 
+{   
+	Complex c(1.2,3.4);   
+	cout << (double)c << endl; //输出 1.2   
+	double n = 2 + c; //等价于 double n=2+c.operator double()   
+	cout << n; //输出 3.2 
+	return 0;
+} 
+------------------------------------------------------------
+
+//MyInt 类强制转换为int
+#include <iostream> 
+using namespace std;
+class MyInt 
+{ 
+	int nVal; 
+	public: 
+	MyInt( int n) { nVal = n ;}
+	//运算符“- ”重载，返回MyInt类的引用 
+	MyInt & operator -(int i)
+	{
+		nVal-=i;
+		return *this;
+	}
+	//类型转换运算符，MyInt类对象转换为int 
+	operator int()
+	{
+		return nVal;
+	}
+
+	friend ostream & operator<<( ostream & o,const MyInt & nV)
+	{  
+		o << nV.nVal;  
+		return o; 
+	} 
+}; 
+int Inc(int n) 
+{
+	return n + 1;
+}
+int main () { 
+	int n;
+	while(cin >>n) 
+	{
+		//创建MyInt类的对象objInt 
+		MyInt objInt(n); 
+		//运算符“- ”重载，返回MyInt类的引用
+		//MyInt类的对象objInt与int“- ”运算的结果为MyInt类的对象
+		objInt-2-1-3;
+		//MyInt类转为int，类型转换运算符  
+		cout << Inc(objInt);
+		cout <<","; 
+		objInt-2-1; 
+		cout << Inc(objInt) << endl;
+	}
+	return 0;
+}
+ 
